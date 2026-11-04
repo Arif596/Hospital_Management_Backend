@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors"
 import morgan from "morgan";
 import authRoutes  from './Routes/authRoutes.js'
+import doctorRoutes from './Routes/doctorRoutes.js'
+import AppointmentRoutes from './Routes/appointmentRoutes.js'
 import { errorMiddleware, notFound } from "./Middleware/errorMiddlewares.js";
 const app=express();
 app.use(helmet());
@@ -16,7 +18,8 @@ app.get('/',(req,res)=>{
 })
 // user routes
 app.use('/api/auth',authRoutes)
-
+app.use('/api/doctors',doctorRoutes)
+app.use('/api/appointment',AppointmentRoutes)
 app.use(notFound);
 app.use(errorMiddleware)
 

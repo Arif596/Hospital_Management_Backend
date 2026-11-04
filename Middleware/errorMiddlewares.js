@@ -36,6 +36,11 @@ export const errorMiddleware = (err, req, res, next) => {
     message = Object.values(err.errors).map((e) => e.message).join(", ");
     statusCode = 400;
   }
+  // Multer errors (file too large, etc.)
+if(err.name==="MulterError"){
+  message=err.code==="LIMIT_FILE_SIZE" ? "Image must be under 2 MB" : err.message;
+  statusCode=400;
+}
 
   res.status(statusCode).json({
     success: false,
