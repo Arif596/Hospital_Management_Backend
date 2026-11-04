@@ -3,6 +3,7 @@ import Appointment from "../Models/Appointment.js";
 import Doctor from "../Models/Doctor.js";
 import catchAsyncError from "../Middleware/CatchAsyncError.js";
 import ErrorHandler from "../Utils/ErrorHandler.js";
+import mongoose from "mongoose";
 
 const bookSchema = z.object({
   doctorId: z.string().length(24, "Invalid doctor id"),
@@ -132,4 +133,24 @@ export const updateStatus = catchAsyncError(async (req, res) => {
   await appointment.save();
 
   res.json({ success: true, appointment });
+});
+// @desc    Booked slots of a doctor (sirf date + slot, patient ka koi data nahi)
+// @route   GET /api/v1/appointment/booked/:doctorId
+// @access  Public
+export const bookedSlots = catchAsyncError(async (req, res) => {
+  const { doctorId } = req.params;
+  if (!mongoose.isValidObjectId(doctorId)) {
+    throw new ErrorHandler("Invalid doctor id", 400);
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const slots = await Appointment.find({
+    doctor: doctorId,
+    date: { $gte: today },
+    status: { $in: ["pending", "confirmed"] },
+  })
+    .select("date timeSlot -_id")
+    .lean();
+
+  res.json({ success: true, slots });
 });

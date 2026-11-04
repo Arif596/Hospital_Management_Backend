@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";          // PEHLI line, baaki imports se pehle
+// import dotenv from "dotenv";
 
 import app from "./app.js";
 import connectDB from "./configure/db.js";

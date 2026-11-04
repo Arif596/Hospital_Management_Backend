@@ -17,6 +17,19 @@ const userSchema = new mongoose.Schema(
       enum: ["patient", "doctor", "admin"],
       default: "patient",
     },
+     phone: { type: String, trim: true, default: "" },
+    address: {
+      line1: { type: String, trim: true, default: "" },
+      line2: { type: String, trim: true, default: "" },
+    },
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Not Selected"],
+      default: "Not Selected",
+    },
+    dob: { type: String, default: "" },                          // "2000-01-20"
+    image: { type: String, default: "" },                        // Cloudinary URL
+    imagePublicId: { type: String, default: "", select: false },
   },
   { timestamps: true }
 );

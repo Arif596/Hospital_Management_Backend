@@ -7,8 +7,12 @@ import ErrorHandler from "../Utils/ErrorHandler.js";
 export const protect = catchAsyncError(async (req, res, next) => {
   let token;
 
-  // Token is expected in the header: Authorization: Bearer <token>
-  if (req.headers.authorization?.startsWith("Bearer ")) {
+  // 1) Pehle httpOnly cookie se (browser frontend yahi bhejta hai)
+  if (req.cookies?.token) {
+    token = req.cookies.token;
+  }
+  // 2) Warna header se: Authorization: Bearer <token> (Postman wagera ke liye)
+  else if (req.headers.authorization?.startsWith("Bearer ")) {
     token = req.headers.authorization.split(" ")[1];
   }
 
